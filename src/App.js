@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Hello World
+          리액트 프로젝트
         </a>
       </header>
     </div>
