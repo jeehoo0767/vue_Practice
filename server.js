@@ -31,7 +31,7 @@ app.get('/api/customers', (req, res) => {
             'birthday' : '124045',
             'gender' : '남자',
             'job' : '선수'
-        }
+        },
     ]);
    
 });

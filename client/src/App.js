@@ -8,17 +8,22 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-import { withStyles } from '@material-ui/core/styles';
+import { ThemeProvider, withStyles, makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const styles =  {
+
+const styles = theme => ({
     root : {
         width : '100%',
         overflowX : "auto"
     },
     table : {
         minWidth : 1080
+    },
+    progress: {
+        margin : theme.spacing.unit *2
     }
-};
+});
 
 // const customers = [
 //     {
@@ -47,13 +52,29 @@ const styles =  {
 //     }
 // ];
 
+/* 리액트 라이프사이클
+1) constructor()
+
+2) componentWillMount()
+
+3) render()
+
+4) componentDidMount()
+
+*컴포넌트의 props or state가 변경될때 =>
+shoulddComponentUpdate() 함수 실행 후 render() 함수를 불러와서 화면 랜더링 
+*/
+
+
 class App extends React.Component{
 
     state = {
-        customers:""
+        customers:"",
+        completes:0
     }
 
     componentDidMount() {
+        this.timer = setInterval(this.progress, 20);
         this.callApi()
             .then(res => this.setState({customers : res}))
             .catch(err => console.log(err))
@@ -62,7 +83,13 @@ class App extends React.Component{
     callApi = async () => {
         const response = await fetch('/api/customers');
         const body = await response.json();
+        console.log(body);
         return body;
+    }
+
+    progress = () =>{
+        const { completed } = this.state;
+        this.setState({ completed : completed >=100 ? 0 : completed +1});
     }
 
     render(){
@@ -94,7 +121,13 @@ class App extends React.Component{
                         job = {c.job}
                         />
                         );
-                    }) : "") 
+                    }) : 
+                        <TableRow>
+                            <TableCell colSpan="6" align="center">
+                                <CircularProgress className={classes.progress} value={this.state.completed}/>
+                            </TableCell>
+                        </TableRow>
+                    ) 
                     // 고객 데이터가 있다면, 없으면 빈 문자열 
                 }
                     </TableBody>
