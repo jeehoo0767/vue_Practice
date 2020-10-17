@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Customer from './components/Customer';
+import CustomerAdd from './components/CustomerAdd';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -22,7 +23,7 @@ const styles = theme => ({
     },
     progress: {
         margin : theme.spacing.unit *2
-    }
+    },
 });
 
 // const customers = [
@@ -80,7 +81,7 @@ class App extends React.Component{
             .catch(err => console.log(err))
     }
 
-    callApi = async () => {
+   callApi = async () => {
         const response = await fetch('/api/customers');
         const body = await response.json();
         console.log(body);
@@ -95,44 +96,47 @@ class App extends React.Component{
     render(){
         const { classes } = this.props;
         return(
-            <Paper className={classes.root}>
-                <Table className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>번호</TableCell>
-                            <TableCell>이름</TableCell>
-                            <TableCell>이미지</TableCell>
-                            <TableCell>생년월일</TableCell>
-                            <TableCell>성별</TableCell>
-                            <TableCell>직업</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {
-                    (this.state.customers ? this.state.customers.map( c => {
-                        return (
-                        <Customer
-                        key = {c.id}
-                        id={c.id}
-                        image={c.image}
-                        name={c.name}
-                        birthday ={c.birthday}
-                        gender ={c.gender}
-                        job = {c.job}
-                        />
-                        );
-                    }) : 
-                        <TableRow>
-                            <TableCell colSpan="6" align="center">
-                                <CircularProgress className={classes.progress} value={this.state.completed}/>
-                            </TableCell>
-                        </TableRow>
-                    ) 
-                    // 고객 데이터가 있다면, 없으면 빈 문자열 
-                }
-                    </TableBody>
-                </Table>
-            </Paper>
+            <div>
+                <Paper className={classes.root}>
+                    <Table className={classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>번호</TableCell>
+                                <TableCell>이름</TableCell>
+                                <TableCell>이미지</TableCell>
+                                <TableCell>생년월일</TableCell>
+                                <TableCell>성별</TableCell>
+                                <TableCell>직업</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {
+                        (this.state.customers ? this.state.customers.map( c => {
+                            return (
+                            <Customer
+                            key = {c.id}
+                            id={c.id}
+                            image={c.image}
+                            name={c.name}
+                            birthday ={c.birthday}
+                            gender ={c.gender}
+                            job = {c.job}
+                            />
+                            );
+                        }) : 
+                            <TableRow>
+                                <TableCell colSpan="6" align="center">
+                                    <CircularProgress className={classes.progress} value={this.state.completed}/>
+                                </TableCell>
+                            </TableRow>
+                        ) 
+                        // 고객 데이터가 있다면, 없으면 빈 문자열 
+                    }
+                        </TableBody>
+                    </Table>
+                </Paper>
+                <CustomerAdd/>
+            </div>
         );
     };
 }
