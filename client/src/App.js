@@ -69,9 +69,23 @@ shoulddComponentUpdate() 함수 실행 후 render() 함수를 불러와서 화�
 
 class App extends React.Component{
 
-    state = {
-        customers:"",
-        completes:0
+    constructor(props) {
+        super(props);
+        this.state = {
+            customers:"",
+            completes:0
+        }
+    }
+
+
+    stateRefresh = () =>{
+        this.setState({
+            customers : "",
+            completed:0
+        });
+        this.callApi()
+            .then(res => this.setState({customers : res}))
+            .catch(err => console.log(err))
     }
 
     componentDidMount() {
@@ -135,7 +149,7 @@ class App extends React.Component{
                         </TableBody>
                     </Table>
                 </Paper>
-                <CustomerAdd/>
+                <CustomerAdd stateRefresh={this.stateRefresh}/>
             </div>
         );
     };
