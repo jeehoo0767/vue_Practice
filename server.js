@@ -30,7 +30,6 @@ app.get('/api/customers', (req, res) => {
             res.send(rows);
         }
     );
-   
 });
 
 app.use('/image', express.static('./upload'));
@@ -43,6 +42,30 @@ app.post('/api/customers', upload.single('image'), (req, res) =>{
     let gender = req.body.gender;
     let job = req.body.job;
     let params = [image, name, birthday, gender, job];
+    connection.query(sql, params, 
+        (err, rows, fields) =>{
+            res.send(rows);
+        }
+    )  
+});
+
+app.get('/api/user', (req, res) => {
+    // connection.query(
+    //     "SELECT * FROM CUSTOMER WHERE isdeleted = 0",
+    //     (err, rows, fields) => {
+    //         res.send(rows);
+    //     }
+    // );
+    res.send({message : "hello"});
+});
+
+app.post('/api/user', (req, res) =>{
+    let sql = 'insert into user values (?, ?)';
+    let userId = req.body.userId;
+    let userPassword = req.body.userPassword;
+    let params = [userId, userPassword];
+    console.log(userId);
+    console.log(userPassword);
     connection.query(sql, params, 
         (err, rows, fields) =>{
             res.send(rows);

@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Customer from './components/Customer';
 import CustomerAdd from './components/CustomerAdd';
+import Join from './components/join.js';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -226,6 +227,7 @@ class App extends React.Component{
                     </AppBar>
                     <div className={classes.menu}>
                         <CustomerAdd stateRefresh={this.stateRefresh}/>
+                        <Join stateRefresh={this.stateRefresh}/>
                     </div>
                 <Paper className={classes.paper}>
                     <Table className={classes.table}>
