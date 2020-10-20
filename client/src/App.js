@@ -128,7 +128,7 @@ const styles = theme => ({
 4) componentDidMount()
 
 *컴포넌트의 props or state가 변경될때 =>
-shoulddComponentUpdate() 함수 실행 후 render() 함수를 불러와서 화면 랜더링 
+shouldComponentUpdate() 함수 실행 후 render() 함수를 불러와서 화면 랜더링 
 */
 
 
@@ -138,7 +138,8 @@ class App extends React.Component{
         super(props);
         this.state = {
             customers:"",
-            completes:0
+            completes:0,
+            searchKeyword:""
         }
     }
 
@@ -146,7 +147,8 @@ class App extends React.Component{
     stateRefresh = () =>{
         this.setState({
             customers : "",
-            completed:0
+            completed:0,
+            searchKeyword:""
         });
         this.callApi()
             .then(res => this.setState({customers : res}))
@@ -172,7 +174,21 @@ class App extends React.Component{
         this.setState({ completed : completed >=100 ? 0 : completed +1});
     }
 
+    handleValueChande = (e) =>{
+        let nextState = {};
+        nextState[e.target.name] = e.target.value;
+        this.setState(nextState);
+    }
+
     render(){
+        const filteredComponents = (data) =>{
+            data = data.filter((c)=>{
+                return c.name.indexOf(this.state.searchKeyword) > -1;
+            });
+            return data.map((c)=>{
+                return <Customer stateRefresh={this.stateRefresh} key={c.id} id={c.id} name={c.name} image={c.image} birthday={c.birthday} gender={c.gender} job={c.job}/>
+            });
+        }
         const { classes } = this.props;
         const cellList = ["번호", "이름", "프로필 이미지", "생년월일", "성별", "직업", "설정"];
         return(
@@ -200,7 +216,10 @@ class App extends React.Component{
                                 root: classes.inputRoot,
                                 input: classes.inputInput,
                             }}
-                            inputProps={{ 'aria-label': 'search' }}
+                            // inputProps={{ 'aria-label': 'search' }}
+                            name="searchKeyword" 
+                            value = {this.state.searchKeyword} 
+                            onChange = {this.handleValueChande}
                             />
                         </div>
                         </Toolbar>
@@ -219,26 +238,14 @@ class App extends React.Component{
                         </TableHead>
                         <TableBody>
                         {
-                        (this.state.customers ? this.state.customers.map( c => {
-                            return (
-                            <Customer
-                            stateRefresh={this.stateRefresh}
-                            key = {c.id}
-                            id={c.id}
-                            image={c.image}
-                            name={c.name}
-                            birthday ={c.birthday}
-                            gender ={c.gender}
-                            job = {c.job}
-                            />
-                            );
-                        }) : 
+                        this.state.customers?
+                            filteredComponents(this.state.customers) : 
                             <TableRow>
                                 <TableCell colSpan="6" align="center">
                                     <CircularProgress className={classes.progress} value={this.state.completed}/>
                                 </TableCell>
                             </TableRow>
-                        ) 
+                         
                         // 고객 데이터가 있다면, 없으면 빈 문자열 
                     }
                         </TableBody>
