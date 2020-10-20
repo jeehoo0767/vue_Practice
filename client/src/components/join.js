@@ -69,10 +69,11 @@ class Join extends React.Component{
 
     addUser = () =>{
         const url = '/api/user';
+        const params = new URLSearchParams();
         const formData = new FormData();
-        formData.append('userId', this.state.userId);
-        formData.append('userPassword',this.state.userPassword);
-        return post(url, formData);
+        params.append('userId', this.state.userId);
+        params.append('userPassword',this.state.userPassword);
+        return post(url, params);
     }
 
     render(){
