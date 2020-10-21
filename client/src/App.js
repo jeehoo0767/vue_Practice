@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Customer from './components/Customer';
 import CustomerAdd from './components/CustomerAdd';
+import LoginForm from './components/LoginForm';
 import Join from './components/join.js';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -12,7 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import { ThemeProvider, withStyles, makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,6 +22,7 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+
 
 
 const styles = theme => ({
@@ -166,7 +168,7 @@ class App extends React.Component{
    callApi = async () => {
         const response = await fetch('/api/customers');
         const body = await response.json();
-        console.log(body);
+        // console.log(body);
         return body;
     }
 
@@ -194,7 +196,7 @@ class App extends React.Component{
         const cellList = ["번호", "이름", "프로필 이미지", "생년월일", "성별", "직업", "설정"];
         return(
             <div className={classes.root}>
-                  <AppBar position="static">
+                  {/* <AppBar position="static">
                         <Toolbar>
                         <IconButton
                             edge="start"
@@ -224,10 +226,21 @@ class App extends React.Component{
                             />
                         </div>
                         </Toolbar>
+                    </AppBar> */}
+                    <AppBar position="static">
+                        <Toolbar>
+                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" className={classes.title}>
+                            고객 관리 시스템
+                        </Typography>
+                        <Join stateRefresh={this.stateRefresh}/>
+                        <LoginForm stateRefresh={this.stateRefresh}/>
+                        </Toolbar>
                     </AppBar>
                     <div className={classes.menu}>
                         <CustomerAdd stateRefresh={this.stateRefresh}/>
-                        <Join stateRefresh={this.stateRefresh}/>
                     </div>
                 <Paper className={classes.paper}>
                     <Table className={classes.table}>

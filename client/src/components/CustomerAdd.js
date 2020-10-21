@@ -92,6 +92,7 @@ class CustomerAdd extends React.Component{
                 'content-type' : 'multipart/form-data'
             }
         }
+        console.log(formData);
         return post(url, formData, config);
     }
 
@@ -100,8 +101,8 @@ class CustomerAdd extends React.Component{
         return(
             <div>
                 <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
-            고객 추가하기
-          </Button>
+                    고객 추가하기
+                </Button>
                 <Dialog open={this.state.open} onClose={this.handleClose}>
                     <DialogTitle>
                         고객 추가

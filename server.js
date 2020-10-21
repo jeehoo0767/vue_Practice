@@ -34,6 +34,36 @@ app.get('/api/customers', (req, res) => {
 
 app.use('/image', express.static('./upload'));
 
+app.get('/api/user', (req, res) => {
+    connection.query(
+        "SELECT * FROM user",
+        (err, rows, fields) => {
+            res.send(rows);
+        }
+    );
+    // res.send({message : "hello"});
+});
+
+app.post('/api/user', (req,res)=>{
+    let sql = 'insert into user values (?, ?)';
+    let userId = req.body.userId;
+    let userPassword = req.body.userPassword;
+    console.log(userId);
+    console.log(userPassword);
+    let params = [userId, userPassword];
+    connection.query(sql,params,
+        (err, rows, fields)=> {
+            if (err) {
+                console.log("fuck");
+                res.json({ resultCode : false});
+            }
+            else {
+            res.send(rows);
+            }
+        }
+     )
+});
+
 app.post('/api/customers', upload.single('image'), (req, res) =>{
     let sql = 'insert into customer values (null, ?, ?, ?, ?, ?, now(),0)';
     let image = 'http://localhost:5000/image/' + req.file.filename;
