@@ -30,6 +30,7 @@ app.get('/api/customers', (req, res) => {
             res.send(rows);
         }
     );
+        // res.send({message : "hello"});
 });
 
 app.use('/image', express.static('./upload'));
@@ -54,7 +55,6 @@ app.post('/api/user', (req,res)=>{
     connection.query(sql,params,
         (err, rows, fields)=> {
             if (err) {
-                console.log("fuck");
                 res.json({ resultCode : false});
             }
             else {
@@ -89,19 +89,19 @@ app.get('/api/user', (req, res) => {
     res.send({message : "hello"});
 });
 
-app.post('/api/user', (req, res) =>{
-    let sql = 'insert into user values (?, ?)';
-    let userId = req.body.userId;
-    let userPassword = req.body.userPassword;
-    let params = [userId, userPassword];
-    console.log(userId);
-    console.log(userPassword);
-    connection.query(sql, params, 
-        (err, rows, fields) =>{
-            res.send(rows);
-        }
-    )  
-});
+// app.post('/api/user', (req, res) =>{
+//     let sql = 'insert into user values (?, ?)';
+//     let userId = req.body.userId;
+//     let userPassword = req.body.userPassword;
+//     let params = [userId, userPassword];
+//     console.log(userId);
+//     console.log(userPassword);
+//     connection.query(sql, params, 
+//         (err, rows, fields) =>{
+//             res.send(rows);
+//         }
+//     )  
+// });
 
 app.delete('/api/customers/:id', (req,res) =>{
     let sql = 'update customer set isdeleted = 1 where id = ?';

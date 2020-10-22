@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import { post } from 'axios';
+import axios from 'axios';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -86,7 +86,7 @@ class Join extends React.Component{
         // const formData = new FormData();
         params.append('userId', this.state.userId);
         params.append('userPassword',this.state.userPassword);
-        return post(url, params);
+        return axios.post(url, params);
     }
 
     render(){
