@@ -242,6 +242,8 @@ class App extends React.Component{
                     <div className={classes.menu}>
                         <CustomerAdd stateRefresh={this.stateRefresh}/>
                     </div>
+                    {
+                        
                 <Paper className={classes.paper}>
                     <Table className={classes.table}>
                         <TableHead>
@@ -266,6 +268,7 @@ class App extends React.Component{
                         </TableBody>
                     </Table>
                 </Paper>
+                }
             </div>
         );
     };
