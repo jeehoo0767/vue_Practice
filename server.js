@@ -6,13 +6,15 @@ const port = process.env.PORT || 5000;
 const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+const bkfd2Password = require("pbkdf2-password");
+const hasher = bkfd2Password();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true}));
-app.use(cookieParser());
 
 const data = fs.readFileSync('database.json');
 const conf = JSON.parse(data);
 const mysql = require('mysql');
+
 
 const connection = mysql.createConnection({
     host : conf.host,
@@ -37,6 +39,8 @@ app.get('/api/customers', (req, res) => {
 });
 
 app.use('/image', express.static('./upload'));
+app.use(passport.initialize()); // passport 초기화
+app.use(passport.session()); // session을 사용
 
 app.get('/api/user', (req, res) => {
     connection.query(
