@@ -147,7 +147,7 @@ class App extends React.Component{
     }
 
 
-    stateRefresh = () =>{
+    stateRefresh = () => {
         this.setState({
             customers : "",
             completed:0,
