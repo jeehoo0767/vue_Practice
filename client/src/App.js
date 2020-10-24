@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Customer from './components/Customer';
@@ -26,48 +26,48 @@ import SearchIcon from '@material-ui/icons/Search';
 
 
 const styles = theme => ({
-    root : {
-        width : '100%',
+    root: {
+        width: '100%',
         minWidth: 1080
     },
     menu: {
-        marginTop : 15,
-        marginBottom : 15,
-        display:'flex',
-        justifyContent : 'center'
+        marginTop: 15,
+        marginBottom: 15,
+        display: 'flex',
+        justifyContent: 'center'
     },
-    paper :{
-        marginLeft : 18,
-        marginRight : 18
+    paper: {
+        marginLeft: 18,
+        marginRight: 18
     },
     progress: {
-        margin : theme.spacing.unit *2
+        margin: theme.spacing.unit * 2
     },
     menuButton: {
         marginRight: theme.spacing(2),
-      },
-      title: {
+    },
+    title: {
         flexGrow: 1,
         display: 'none',
         [theme.breakpoints.up('sm')]: {
-          display: 'block',
+            display: 'block',
         },
-      },
-      search: {
+    },
+    search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
         backgroundColor: fade(theme.palette.common.white, 0.15),
         '&:hover': {
-          backgroundColor: fade(theme.palette.common.white, 0.25),
+            backgroundColor: fade(theme.palette.common.white, 0.25),
         },
         marginLeft: 0,
         width: '100%',
         [theme.breakpoints.up('sm')]: {
-          marginLeft: theme.spacing(1),
-          width: 'auto',
+            marginLeft: theme.spacing(1),
+            width: 'auto',
         },
-      },
-      searchIcon: {
+    },
+    searchIcon: {
         padding: theme.spacing(0, 2),
         height: '100%',
         position: 'absolute',
@@ -75,23 +75,23 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-      },
-      inputRoot: {
+    },
+    inputRoot: {
         color: 'inherit',
-      },
-      inputInput: {
+    },
+    inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
-          width: '12ch',
-          '&:focus': {
-            width: '20ch',
-          },
+            width: '12ch',
+            '&:focus': {
+                width: '20ch',
+            },
         },
-      },
+    },
 });
 
 // const customers = [
@@ -135,68 +135,68 @@ shouldComponentUpdate() 함수 실행 후 render() 함수를 불러와서 화면
 */
 
 
-class App extends React.Component{
+class App extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            customers:"",
-            completes:0,
-            searchKeyword:""
+            customers: "",
+            completes: 0,
+            searchKeyword: ""
         }
     }
 
 
     stateRefresh = () => {
         this.setState({
-            customers : "",
-            completed:0,
-            searchKeyword:""
+            customers: "",
+            completed: 0,
+            searchKeyword: ""
         });
         this.callApi()
-            .then(res => this.setState({customers : res}))
+            .then(res => this.setState({ customers: res }))
             .catch(err => console.log(err))
     }
 
     componentDidMount() {
         this.timer = setInterval(this.progress, 20);
         this.callApi()
-            .then(res => this.setState({customers : res}))
+            .then(res => this.setState({ customers: res }))
             .catch(err => console.log(err))
     }
 
-   callApi = async () => {
+    callApi = async () => {
         const response = await fetch('/api/customers');
         const body = await response.json();
         // console.log(body);
         return body;
     }
 
-    progress = () =>{
+    progress = () => {
         const { completed } = this.state;
-        this.setState({ completed : completed >=100 ? 0 : completed +1});
+        this.setState({ completed: completed >= 100 ? 0 : completed + 1 });
     }
 
-    handleValueChande = (e) =>{
+    handleValueChande = (e) => {
         let nextState = {};
         nextState[e.target.name] = e.target.value;
         this.setState(nextState);
     }
 
-    render(){
-        const filteredComponents = (data) =>{
-            data = data.filter((c)=>{
+    render() {
+        const filteredComponents = (data) => {
+            data = data.filter((c) => {
                 return c.name.indexOf(this.state.searchKeyword) > -1;
             });
-            return data.map((c)=>{
-                return <Customer stateRefresh={this.stateRefresh} key={c.id} id={c.id} name={c.name} image={c.image} birthday={c.birthday} gender={c.gender} job={c.job}/>
+            return data.map((c) => {
+                return <Customer stateRefresh={this.stateRefresh} key={c.id} id={c.id} name={c.name} image={c.image} birthday={c.birthday} gender={c.gender} job={c.job} />
             });
         }
         const { classes } = this.props;
         const cellList = ["번호", "이름", "프로필 이미지", "생년월일", "성별", "직업", "설정"];
-        return(
+        return (
             <div className={classes.root}>
-                  {/* <AppBar position="static">
+                {/* <AppBar position="static">
                         <Toolbar>
                         <IconButton
                             edge="start"
@@ -227,42 +227,41 @@ class App extends React.Component{
                         </div>
                         </Toolbar>
                     </AppBar> */}
-                    <AppBar position="static">
-                        <Toolbar>
+                <AppBar position="static">
+                    <Toolbar>
                         <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
                             고객 관리 시스템
                         </Typography>
-                        <Join stateRefresh={this.stateRefresh}/>
-                        <LoginForm stateRefresh={this.stateRefresh}/>
-                        </Toolbar>
-                    </AppBar>
-                    <div className={classes.menu}>
-                        <CustomerAdd stateRefresh={this.stateRefresh}/>
-                    </div>
+                        <Join stateRefresh={this.stateRefresh} />
+                        <LoginForm stateRefresh={this.stateRefresh} />
+                    </Toolbar>
+                </AppBar>
+                <div className={classes.menu}>
+                    <CustomerAdd stateRefresh={this.stateRefresh} />
+                </div>
                 <Paper className={classes.paper}>
                     <Table className={classes.table}>
                         <TableHead>
                             <TableRow>
-                                {cellList.map(c =>{
+                                {cellList.map(c => {
                                     return <TableCell className={classes.tableHead}>{c}</TableCell>
                                 })}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                        {
-                        this.state.customers?
-                            filteredComponents(this.state.customers) : 
-                            <TableRow>
-                                <TableCell colSpan="6" align="center">
-                                    <CircularProgress className={classes.progress} value={this.state.completed}/>
-                                </TableCell>
-                            </TableRow>
-                         
-                        // 고객 데이터가 있다면, 없으면 빈 문자열 
-                    }
+                            {
+                                // 고객 데이터가 있다면, 없으면 빈 문자열 
+                                this.state.customers ?
+                                    filteredComponents(this.state.customers) :
+                                    <TableRow>
+                                        <TableCell colSpan="6" align="center">
+                                            <CircularProgress className={classes.progress} value={this.state.completed} />
+                                        </TableCell>
+                                    </TableRow>
+                            }
                         </TableBody>
                     </Table>
                 </Paper>
