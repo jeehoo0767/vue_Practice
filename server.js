@@ -4,9 +4,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 5000;
 const session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const bkfd2Password = require("pbkdf2-password");
+const bkfd2Password = require("pbkdf2password");
 const hasher = bkfd2Password();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true}));
@@ -15,6 +16,22 @@ const data = fs.readFileSync('database.json');
 const conf = JSON.parse(data);
 const mysql = require('mysql');
 
+
+app.use(session({ // session 미들웨어
+    secret: '1234DSFs@adf1234!@#&asd',
+    resave: false,
+    saveUninitialized: true,
+    store: new MySQLStore({
+    host: 'localhost',
+    port: 3306,
+    user: '',
+    password: '',
+    database: ''
+    })
+    }));
+    
+app.use(passport.initialize()); // passport 초기화
+app.use(passport.session()); // session을 사용
 
 const connection = mysql.createConnection({
     host : conf.host,
@@ -39,8 +56,7 @@ app.get('/api/customers', (req, res) => {
 });
 
 app.use('/image', express.static('./upload'));
-app.use(passport.initialize()); // passport 초기화
-app.use(passport.session()); // session을 사용
+
 
 app.get('/api/user', (req, res) => {
     connection.query(
@@ -62,7 +78,7 @@ app.post('/api/user', (req,res)=>{
     connection.query(sql,params,
         (err, rows, fields)=> {
             if (err) {
-                res.json({ resultCode : false});
+                res.json({ resultCode : false });
             }
             else {
             res.send(rows);
