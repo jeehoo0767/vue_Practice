@@ -7,7 +7,7 @@ const session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const bkfd2Password = require("pbkdf2password");
+const bkfd2Password = require("pbkdf2-password");
 const hasher = bkfd2Password();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true}));
@@ -17,18 +17,18 @@ const conf = JSON.parse(data);
 const mysql = require('mysql');
 
 
-app.use(session({ // session 미들웨어
-    secret: '1234DSFs@adf1234!@#&asd',
-    resave: false,
-    saveUninitialized: true,
-    store: new MySQLStore({
-    host: 'localhost',
-    port: 3306,
-    user: '',
-    password: '',
-    database: ''
-    })
-    }));
+// app.use(session({ // session 미들웨어
+//     secret: '1234DSFs@adf1234!@#&asd',
+//     resave: false,
+//     saveUninitialized: true,
+//     store: new MySQLStore({
+//     host: 'localhost',
+//     port: 3306,
+//     user: '',
+//     password: '',
+//     database: ''
+//     })
+//     }));
     
 app.use(passport.initialize()); // passport 초기화
 app.use(passport.session()); // session을 사용
@@ -67,6 +67,21 @@ app.get('/api/user', (req, res) => {
     );
     // res.send({message : "hello"});
 });
+
+app.post('/api/login', (req,res)=>{
+    let sqlUserIdCheck = 'select * from user where userId = ?';
+    let sqlUserPasswordCheck = `select * from user where userPassword = ?`;
+    let userId = req.body.userId;
+    let userPassword = req.body.userPassword;
+    let params = [userId, userPassword];
+    connection.query(sqlUserIdCheck, [userId],
+        (err, rows, fields)=>{
+            res.send(rows);
+            console.log("rows : " + rows);
+            console.log("err : " +err);
+            console.log("fields : " + fields);
+        })
+})
 
 app.post('/api/user', (req,res)=>{
     let sql = 'insert into user values (?, ?)';

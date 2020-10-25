@@ -109,7 +109,7 @@ class Join extends React.Component{
                     </label>
                     <br/> */}
                     <TextField label="아이디" type="text" name="userId" value={this.state.userId} onChange={this.handleValueChange}/><br></br>
-                    <TextField label="비밀번호" type="text" name="userPassword" vlaue={this.state.userPassword} onChange={this.handleValueChange}/><br></br>
+                    <TextField label="비밀번호" type="password" name="userPassword" vlaue={this.state.userPassword} onChange={this.handleValueChange}/><br></br>
                     {/* <TextField label="성별"type="text" name="gender" value={this.state.gender} onChange={this.handleValueChange}/><br></br>
                     <TextField label="직업"type="text" name="job" value={this.state.job} onChange={this.handleValueChange}/><br></br> */}
                     </DialogContent>
