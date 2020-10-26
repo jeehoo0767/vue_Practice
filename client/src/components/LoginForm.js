@@ -61,8 +61,8 @@ class Join extends React.Component{
         this.LoginForm()
             .then((response)=>{
                 console.log(response.data);
-                if(response.data.resultCode === false){
-                    alert("아이디 중복");
+                if(response.data.LoginCode === false){
+                    alert("없는 아이디 입니다.");
                     this.setState({
                         open:true
                     });

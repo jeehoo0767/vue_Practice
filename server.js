@@ -76,10 +76,12 @@ app.post('/api/login', (req,res)=>{
     let params = [userId, userPassword];
     connection.query(sqlUserIdCheck, [userId],
         (err, rows, fields)=>{
+            if(err){
+                res.json({ LoginCode : false });
+            }
+            else{
             res.send(rows);
-            console.log("rows : " + rows);
-            console.log("err : " +err);
-            console.log("fields : " + fields);
+        }
         })
 })
 
