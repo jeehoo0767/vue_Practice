@@ -74,12 +74,15 @@ app.post('/api/login', (req,res)=>{
     let userId = req.body.userId;
     let userPassword = req.body.userPassword;
     let params = [userId, userPassword];
+    const emptyArr = [];
     connection.query(sqlUserIdCheck, [userId],
         (err, rows, fields)=>{
-            if(err){
+            if(rows.length === 0){
+                console.log(err);
                 res.json({ LoginCode : false });
             }
             else{
+                console.log("else : " + rows);
             res.send(rows);
         }
         })
