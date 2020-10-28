@@ -6,7 +6,9 @@ const port = process.env.PORT || 5000;
 const session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 const passport = require('passport');
+// const LocalStrategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
+const crypto = require('crypto');
 const bkfd2Password = require("pbkdf2-password");
 const hasher = bkfd2Password();
 app.use(bodyParser.json());
@@ -22,25 +24,25 @@ const mysql = require('mysql');
 //     resave: false,
 //     saveUninitialized: true,
 //     store: new MySQLStore({
-//     host: 'localhost',
-//     port: 3306,
-//     user: '',
-//     password: '',
-//     database: ''
+//         host : conf.host,
+//         user : conf.user,
+//         password : conf.password,
+//         port : conf.port,
+//         database : conf.database
 //     })
 //     }));
     
+    const connection = mysql.createConnection({
+        host : conf.host,
+        user : conf.user,
+        password : conf.password,
+        port : conf.port,
+        database : conf.database
+    });
+    connection.connect();
+
 app.use(passport.initialize()); // passport 초기화
 app.use(passport.session()); // session을 사용
-
-const connection = mysql.createConnection({
-    host : conf.host,
-    user : conf.user,
-    password : conf.password,
-    port : conf.port,
-    database : conf.database
-});
-connection.connect();
 
 const multer = require('multer');
 const upload = multer({dest : './upload'});
@@ -92,16 +94,20 @@ app.post('/api/user', (req,res)=>{
     let sql = 'insert into user values (?, ?)';
     let userId = req.body.userId;
     let userPassword = req.body.userPassword;
+    let salt = Math.round((new Date().valueOf() * Math.random())) + "";
+    let hashPassword = crypto.createHash("sha512").update(userPassword + salt).digest("hex");
     console.log(userId);
     console.log(userPassword);
-    let params = [userId, userPassword];
+    let params = [userId, hashPassword];
     connection.query(sql,params,
         (err, rows, fields)=> {
             if (err) {
+                console.log(err);
                 res.json({ resultCode : false });
             }
             else {
             res.send(rows);
+            // res.render('client/components/CustomerAdd');
             }
         }
      )
