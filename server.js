@@ -70,7 +70,7 @@ app.get('/api/user', (req, res) => {
     // res.send({message : "hello"});
 });
 
-app.post('/api/login', (req,res)=>{
+app.post('/api/login', async (req,res)=>{
     let sqlUserIdCheck = 'select * from user where userId = ?';
     let sqlUserPasswordCheck = `select * from user where userPassword = ?`;
     let sqlSaltValueCheck = `select saltValue, userPassword from user where userId= ? `;
@@ -80,7 +80,7 @@ app.post('/api/login', (req,res)=>{
     let dbSalt = 0;
     let dbPassword = '';
     let hashPassword= '';
-    connection.query(sqlSaltValueCheck, inputId, (err, rows, fields)=>{
+    await connection.query(sqlSaltValueCheck, inputId, (err, rows, fields)=>{
             dbSalt = rows[0].saltValue;
             dbPassword = rows[0].userPassword;
             hashPassword = crypto.createHash("sha512").update(inputPassword + dbSalt).digest("hex");
@@ -95,10 +95,10 @@ app.post('/api/login', (req,res)=>{
                 console.log(err);
                 res.json({ LoginCode : false });
             }
-            else{
-                console.log("else : " + rows);
-            res.send(rows);
-        }
+            else if(dbPassword === hashPassword){
+                    console.log("else : " + rows);
+                    res.send(rows);
+            }
         })
 })
 

@@ -68,7 +68,7 @@ class Join extends React.Component{
                     });
                 }
                 else{
-                alert("ㅊㅋ");
+                alert("환영합니다");
                 this.props.stateRefresh();
                 }
             })
