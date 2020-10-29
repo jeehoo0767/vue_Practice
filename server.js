@@ -73,11 +73,23 @@ app.get('/api/user', (req, res) => {
 app.post('/api/login', (req,res)=>{
     let sqlUserIdCheck = 'select * from user where userId = ?';
     let sqlUserPasswordCheck = `select * from user where userPassword = ?`;
-    let userId = req.body.userId;
-    let userPassword = req.body.userPassword;
-    let params = [userId, userPassword];
-    const emptyArr = [];
-    connection.query(sqlUserIdCheck, [userId],
+    let sqlSaltValueCheck = `select saltValue, userPassword from user where userId= ? `;
+    let inputId = req.body.userId;
+    let inputPassword = req.body.userPassword;
+    let params = [inputId, inputPassword];
+    let dbSalt = 0;
+    let dbPassword = '';
+    let hashPassword= '';
+    connection.query(sqlSaltValueCheck, inputId, (err, rows, fields)=>{
+            dbSalt = rows[0].saltValue;
+            dbPassword = rows[0].userPassword;
+            hashPassword = crypto.createHash("sha512").update(inputPassword + dbSalt).digest("hex");
+            console.log(`디비 패스워드 : ${dbPassword}`);
+            console.log(`디비 소트 : ${dbSalt}`);
+            console.log(`해쉬 패스워드 : ${hashPassword}`);
+        });
+   
+    connection.query(sqlUserIdCheck, [inputId],
         (err, rows, fields)=>{
             if(rows.length === 0){
                 console.log(err);
@@ -91,14 +103,14 @@ app.post('/api/login', (req,res)=>{
 })
 
 app.post('/api/user', (req,res)=>{
-    let sql = 'insert into user values (?, ?)';
+    let sql = 'insert into user values (?, ?, ?)';
     let userId = req.body.userId;
     let userPassword = req.body.userPassword;
     let salt = Math.round((new Date().valueOf() * Math.random())) + "";
     let hashPassword = crypto.createHash("sha512").update(userPassword + salt).digest("hex");
     console.log(userId);
     console.log(userPassword);
-    let params = [userId, hashPassword];
+    let params = [userId, hashPassword, salt];
     connection.query(sql,params,
         (err, rows, fields)=> {
             if (err) {
