@@ -114,7 +114,7 @@ class Join extends React.Component{
                     <TextField label="직업"type="text" name="job" value={this.state.job} onChange={this.handleValueChange}/><br></br> */}
                     </DialogContent>
                     <DialogActions>
-                        <Button variant="contained" color="primary" onClick={this.handleFormSubmit}>추가</Button>
+                        <Button variant="contained" color="primary" onClick={this.handleFormSubmit}>로그인</Button>
                         <Button variant="outlined" color="primary" onClick={this.handleClose}>닫기</Button>
                     </DialogActions>
                 </Dialog>

@@ -32,14 +32,24 @@ const mysql = require('mysql');
 //     })
 //     }));
     
-    const connection = mysql.createConnection({
+app.use(session({
+    key: 'sid',
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    // cookie: {
+    //   maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
+    // }
+  }));
+
+const connection = mysql.createConnection({
         host : conf.host,
         user : conf.user,
         password : conf.password,
         port : conf.port,
         database : conf.database
-    });
-    connection.connect();
+});
+connection.connect();
 
 app.use(passport.initialize()); // passport 초기화
 app.use(passport.session()); // session을 사용
@@ -81,12 +91,17 @@ app.post('/api/login', async (req,res)=>{
     let dbPassword = '';
     let hashPassword= '';
     await connection.query(sqlSaltValueCheck, inputId, (err, rows, fields)=>{
-            dbSalt = rows[0].saltValue;
-            dbPassword = rows[0].userPassword;
-            hashPassword = crypto.createHash("sha512").update(inputPassword + dbSalt).digest("hex");
-            console.log(`디비 패스워드 : ${dbPassword}`);
-            console.log(`디비 소트 : ${dbSalt}`);
-            console.log(`해쉬 패스워드 : ${hashPassword}`);
+            if(rows.length === 0){
+                throw err;
+            }
+            else{
+                dbSalt = rows[0].saltValue;
+                dbPassword = rows[0].userPassword;
+                hashPassword = crypto.createHash("sha512").update(inputPassword + dbSalt).digest("hex");
+                console.log(`디비 패스워드 : ${dbPassword}`);
+                console.log(`디비 소트 : ${dbSalt}`);
+                console.log(`해쉬 패스워드 : ${hashPassword}`);
+            }
         });
    
     connection.query(sqlUserIdCheck, [inputId],
@@ -97,7 +112,9 @@ app.post('/api/login', async (req,res)=>{
             }
             else if(dbPassword === hashPassword){
                     console.log("else : " + rows);
-                    res.send(rows);
+                    req.session.email = inputId;
+                    console.log('세션이메일 : '+ req.session);
+                    res.send(req.session);
             }
         })
 })
