@@ -60,7 +60,7 @@ class Join extends React.Component{
         }
         this.LoginForm()
             .then((response)=>{
-                console.log(response.data);
+                console.log(response);
                 if(response.data.LoginCode === false){
                     alert("없는 아이디 입니다.");
                     this.setState({

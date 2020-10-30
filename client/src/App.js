@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Customer from './components/Customer';
 import CustomerAdd from './components/CustomerAdd';
+import Logout from './components/Logout';
 import LoginForm from './components/LoginForm';
 import Join from './components/join.js';
 import Paper from '@material-ui/core/Paper';
@@ -22,6 +23,7 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import { session } from 'passport';
 
 
 
@@ -194,6 +196,7 @@ class App extends React.Component{
         }
         const { classes } = this.props;
         const cellList = ["번호", "이름", "프로필 이미지", "생년월일", "성별", "직업", "설정"];
+        const value = 1;
         return(
             <div className={classes.root}>
                   {/* <AppBar position="static">
@@ -237,6 +240,7 @@ class App extends React.Component{
                         </Typography>
                         <Join stateRefresh={this.stateRefresh}/>
                         <LoginForm stateRefresh={this.stateRefresh}/>
+                        <Logout stateRefresh={this.stateRefresh}/>
                         </Toolbar>
                     </AppBar>
                     <div className={classes.menu}>

@@ -37,9 +37,9 @@ app.use(session({
     secret: 'secret',
     resave: false,
     saveUninitialized: true,
-    // cookie: {
-    //   maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
-    // }
+    cookie: {
+      maxAge: 240 * 60 * 60 // 쿠키 유효기간 24시간
+    }
   }));
 
 const connection = mysql.createConnection({
@@ -92,7 +92,9 @@ app.post('/api/login', async (req,res)=>{
     let hashPassword= '';
     await connection.query(sqlSaltValueCheck, inputId, (err, rows, fields)=>{
             if(rows.length === 0){
-                throw err;
+                // throw err;
+                console.log(err);
+                return false;
             }
             else{
                 dbSalt = rows[0].saltValue;
@@ -111,9 +113,7 @@ app.post('/api/login', async (req,res)=>{
                 res.json({ LoginCode : false });
             }
             else if(dbPassword === hashPassword){
-                    console.log("else : " + rows);
-                    req.session.email = inputId;
-                    console.log('세션이메일 : '+ req.session);
+                    req.session.email = req.body.userId;
                     res.send(req.session);
             }
         })
@@ -189,6 +189,13 @@ app.delete('/api/customers/:id', (req,res) =>{
             res.send(rows);
         }
     )
-})
+});
+
+app.delete("/api/logout", (req,res)=>{
+    res.json({ reloadCode : true });
+    console.log("삭제");
+    req.session.destroy();
+    res.clearCookie('sid');
+});
 
 app.listen(port, () => console.log(`리스닝 온 포트 ${port}`));
