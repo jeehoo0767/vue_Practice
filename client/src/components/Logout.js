@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import { ThemeProvider, withStyles, makeStyles } from '@material-ui/core/styles';
+import { session } from 'passport';
 
 
 class Logout extends React.Component{
@@ -16,7 +17,7 @@ class Logout extends React.Component{
     callApi = async () => {
         const response = await fetch('/api/logout', {method : 'delete'});
         const body = await response.json();
-        console.log(body);
+        // console.log(body);
         return body;
     }
 
@@ -26,26 +27,21 @@ class Logout extends React.Component{
     //         method : 'delete'
     //     })
     //     .then((response)=>{
-    //         console.log(response);
+    //         console.log(response.json());
     //     })
     // }
 
-    // callApi = async () => {
-    //     const response = await fetch('/api/logout', {method : 'delete'});
-    //     const body = await response.json();
-    //     // console.log(body);
-    //     return body;
-    // }
 
     render(){
         return(
             <Button color="inherit" onClick={this.handleLogout}> 
-                  {
+                  {/* {
                        (() => {
-                        if(session.email){return <div>세션이있네</div>}
+                        if(session.getAttribute("id")){return <div>세션이있네</div>}
                         else{return <div>세션이없네</div>}
                       })()
-                    }
+                    } */}
+                    로그아웃
             </Button>
         )
     }

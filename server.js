@@ -38,7 +38,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-      maxAge: 240 * 60 * 60 // 쿠키 유효기간 24시간
+      maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
     }
   }));
 
@@ -192,9 +192,9 @@ app.delete('/api/customers/:id', (req,res) =>{
 });
 
 app.delete("/api/logout", (req,res)=>{
-    res.json({ reloadCode : true });
     console.log("삭제");
-    req.session.destroy();
+    // req.session.destroy();
+    // res.send(req.session);
     res.clearCookie('sid');
 });
 
