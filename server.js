@@ -38,7 +38,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-      maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
+      maxAge: 500 * 60 * 60 // 쿠키 유효기간 24시간
     }
   }));
 
@@ -55,7 +55,20 @@ app.use(passport.initialize()); // passport 초기화
 app.use(passport.session()); // session을 사용
 
 const multer = require('multer');
+const { request } = require('https');
 const upload = multer({dest : './upload'});
+
+app.get('/api', (req,res) => {
+    console.log('요청옴');
+    if(req.session.email){
+        res.json({ loginCode : true });
+        console.log(" loginCode : true");
+    }
+    else{
+        res.json({ loginCode : false });
+        console.log(" loginCode : false");
+    }
+})
 
 app.get('/api/customers', (req, res) => {
     connection.query(
@@ -105,7 +118,6 @@ app.post('/api/login', async (req,res)=>{
                 console.log(`해쉬 패스워드 : ${hashPassword}`);
             }
         });
-   
     connection.query(sqlUserIdCheck, [inputId],
         (err, rows, fields)=>{
             if(rows.length === 0){
@@ -118,6 +130,7 @@ app.post('/api/login', async (req,res)=>{
             }
         })
 })
+
 
 app.post('/api/user', (req,res)=>{
     let sql = 'insert into user values (?, ?, ?)';
@@ -192,10 +205,16 @@ app.delete('/api/customers/:id', (req,res) =>{
 });
 
 app.delete("/api/logout", (req,res)=>{
-    console.log("삭제");
-    // req.session.destroy();
+    // console.log("삭제");
+    if(req.session.email){
+        req.session.destroy();
+        res.clearCookie('sid');
+        console.log("세션 삭제");
+    }
+    else{
+        console.log("세션 없음");
+    }
     // res.send(req.session);
-    res.clearCookie('sid');
 });
 
 app.listen(port, () => console.log(`리스닝 온 포트 ${port}`));

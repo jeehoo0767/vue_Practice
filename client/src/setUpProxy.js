@@ -5,4 +5,5 @@ module.exports = function(app) {
   app.use(proxy("/api/user", { target: "http://localhost:5000" }));
   app.use(proxy("/api/login", { target: "http://localhost:5000" }));
   app.use(proxy("/api/logout", { target: "http://localhost:5000" }));
+  app.use(proxy("/api", { target: "http://localhost:5000" }));
 };

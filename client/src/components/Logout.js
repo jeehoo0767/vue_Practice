@@ -8,7 +8,6 @@ import { session } from 'passport';
 class Logout extends React.Component{
 
     handleLogout =  (e) =>{
-        const url = '/api/logout';
        this.callApi()
        .then(res => console.log(res));
         this.props.stateRefresh();

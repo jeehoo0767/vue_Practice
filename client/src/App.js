@@ -144,7 +144,8 @@ class App extends React.Component{
         this.state = {
             customers:"",
             completes:0,
-            searchKeyword:""
+            searchKeyword:"",
+            loginCode : false
         }
     }
 
@@ -153,15 +154,36 @@ class App extends React.Component{
         this.setState({
             customers : "",
             completed:0,
-            searchKeyword:""
+            searchKeyword:"",
+            loginCode : false
         });
         this.callApi()
             .then(res => this.setState({customers : res}))
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
+        this.LoginCheck()
+            .then(res => {
+                console.log(res.loginCode);
+                if(res.loginCode === false){
+                    this.setState({loginCode : false})
+                }
+                else{
+                    this.setState({loginCode : true});
+                }
+            });
+            console.log(`로그인 코드 : ${this.state.loginCode}`);
     }
 
     componentDidMount() {
         this.timer = setInterval(this.progress, 20);
+        this.LoginCheck()
+        .then(res => {
+            if(res.loginCode === false){
+                this.setState({loginCode : false})
+            }
+            else{
+                this.setState({loginCode : true});
+            }
+        });
         this.callApi()
             .then(res => this.setState({customers : res}))
             .catch(err => console.log(err))
@@ -171,6 +193,13 @@ class App extends React.Component{
         const response = await fetch('/api/customers');
         const body = await response.json();
         // console.log(body);
+        return body;
+    }
+
+    LoginCheck = async () => {
+        const response = await fetch('/api', {method : 'get'});
+        const body = await response.json();
+        console.log(body);
         return body;
     }
 
@@ -199,55 +228,66 @@ class App extends React.Component{
         const value = 1;
         return(
             <div className={classes.root}>
-                  {/* <AppBar position="static">
-                        <Toolbar>
-                        <IconButton
-                            edge="start"
-                            className={classes.menuButton}
-                            color="inherit"
-                            aria-label="open drawer"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography className={classes.title} variant="h6" noWrap>
-                            고객 관리 시스템
-                        </Typography>
-                        <div className={classes.search}>
-                            <div className={classes.searchIcon}>
-                            <SearchIcon />
+                {/* 로그인 시 검색 메뉴바 */}
+                    <div>
+                        {
+                        this.state.loginCode == false 
+                            ? (
+                            <AppBar position="static">
+                            <Toolbar>
+                            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography variant="h6" className={classes.title}>
+                                고객 관리 시스템
+                            </Typography>
+                            <Join stateRefresh={this.stateRefresh}/>
+                            <LoginForm stateRefresh={this.stateRefresh}/>
+                            </Toolbar>
+                        </AppBar>
+                        )
+                        : ( 
+                            <div>
+                            <AppBar position="static">
+                            <Toolbar>
+                            <IconButton
+                                edge="start"
+                                className={classes.menuButton}
+                                color="inherit"
+                                aria-label="open drawer"
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography className={classes.title} variant="h6" noWrap>
+                                고객 관리 시스템
+                            </Typography>
+                            <Logout stateRefresh={this.stateRefresh}/>
+                            <div className={classes.search}>
+                                <div className={classes.searchIcon}>
+                                <SearchIcon />
+                                </div>
+                                <InputBase
+                                placeholder="검색하기"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                                name="searchKeyword" 
+                                value = {this.state.searchKeyword} 
+                                onChange = {this.handleValueChande}
+                                />
                             </div>
-                            <InputBase
-                            placeholder="검색하기"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            // inputProps={{ 'aria-label': 'search' }}
-                            name="searchKeyword" 
-                            value = {this.state.searchKeyword} 
-                            onChange = {this.handleValueChande}
-                            />
+                            </Toolbar>
+                        </AppBar>
+                        <div className={classes.menu}>
+                            <CustomerAdd stateRefresh={this.stateRefresh}/>
+                            </div>
                         </div>
-                        </Toolbar>
-                    </AppBar> */}
-                    <AppBar position="static">
-                        <Toolbar>
-                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" className={classes.title}>
-                            고객 관리 시스템
-                        </Typography>
-                        <Join stateRefresh={this.stateRefresh}/>
-                        <LoginForm stateRefresh={this.stateRefresh}/>
-                        <Logout stateRefresh={this.stateRefresh}/>
-                        </Toolbar>
-                    </AppBar>
-                    <div className={classes.menu}>
-                        <CustomerAdd stateRefresh={this.stateRefresh}/>
+                        )
+                        }
                     </div>
                     {
-                        
                 <Paper className={classes.paper}>
                     <Table className={classes.table}>
                         <TableHead>
@@ -266,7 +306,6 @@ class App extends React.Component{
                                     <CircularProgress className={classes.progress} value={this.state.completed}/>
                                 </TableCell>
                             </TableRow>
-                         
                         // 고객 데이터가 있다면, 없으면 빈 문자열 
                     }
                         </TableBody>
