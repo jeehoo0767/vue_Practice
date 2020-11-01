@@ -40,7 +40,8 @@ const styles = theme => ({
     },
     paper :{
         marginLeft : 18,
-        marginRight : 18
+        marginRight : 18,
+        marginTop : 18
     },
     progress: {
         margin : theme.spacing.unit *2
@@ -283,35 +284,35 @@ class App extends React.Component{
                         <div className={classes.menu}>
                             <CustomerAdd stateRefresh={this.stateRefresh}/>
                             </div>
+                            {
+                                <Paper className={classes.paper}>
+                                    <Table className={classes.table}>
+                                        <TableHead>
+                                            <TableRow>
+                                                {cellList.map(c =>{
+                                                    return <TableCell className={classes.tableHead}>{c}</TableCell>
+                                                })}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                        {
+                                        this.state.customers?
+                                            filteredComponents(this.state.customers) : 
+                                            <TableRow>
+                                                <TableCell colSpan="6" align="center">
+                                                    <CircularProgress className={classes.progress} value={this.state.completed}/>
+                                                </TableCell>
+                                            </TableRow>
+                                        // 고객 데이터가 있다면, 없으면 빈 문자열 
+                                    }
+                                        </TableBody>
+                                    </Table>
+                                </Paper>
+                        }
                         </div>
                         )
                         }
                     </div>
-                    {
-                <Paper className={classes.paper}>
-                    <Table className={classes.table}>
-                        <TableHead>
-                            <TableRow>
-                                {cellList.map(c =>{
-                                    return <TableCell className={classes.tableHead}>{c}</TableCell>
-                                })}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {
-                        this.state.customers?
-                            filteredComponents(this.state.customers) : 
-                            <TableRow>
-                                <TableCell colSpan="6" align="center">
-                                    <CircularProgress className={classes.progress} value={this.state.completed}/>
-                                </TableCell>
-                            </TableRow>
-                        // 고객 데이터가 있다면, 없으면 빈 문자열 
-                    }
-                        </TableBody>
-                    </Table>
-                </Paper>
-                }
             </div>
         );
     };
