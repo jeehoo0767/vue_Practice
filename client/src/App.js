@@ -226,14 +226,13 @@ class App extends React.Component{
         }
         const { classes } = this.props;
         const cellList = ["번호", "이름", "프로필 이미지", "생년월일", "성별", "직업", "설정"];
-        const value = 1;
         return(
             <div className={classes.root}>
                 {/* 로그인 시 검색 메뉴바 */}
                     <div>
                         {
                         this.state.loginCode == false 
-                            ? (
+                            ? ( //세션이 없으면
                             <AppBar position="static">
                             <Toolbar>
                             <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
@@ -246,8 +245,9 @@ class App extends React.Component{
                             <LoginForm stateRefresh={this.stateRefresh}/>
                             </Toolbar>
                         </AppBar>
+                        
                         )
-                        : ( 
+                        : (  //아니면
                             <div>
                             <AppBar position="static">
                             <Toolbar>
