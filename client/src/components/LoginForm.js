@@ -55,7 +55,7 @@ class Join extends React.Component{
     handleFormSubmit = (e) =>{
         e.preventDefault();
         if(this.state.userId=="" || this.state.userPassword==""){
-            alert("다 입력 해라");
+            alert("아이디를 입력 하세요.");
             return false;
         }
         this.LoginForm()

@@ -32,6 +32,16 @@ const styles = theme => ({
         width : '100%',
         minWidth: 1080
     },
+    centerContent : {
+        width : '100%',
+        height : '800px',
+        display : 'flex',
+        justifyContent : 'center',
+        alignItems : 'center',
+        fontSize : '50px',
+        fontWeight : 'bold',
+        // backGround : ''
+    },
     menu: {
         marginTop : 15,
         marginBottom : 15,
@@ -233,19 +243,25 @@ class App extends React.Component{
                         {
                         this.state.loginCode == false 
                             ? ( //세션이 없으면
-                            <AppBar position="static">
-                            <Toolbar>
-                            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography variant="h6" className={classes.title}>
-                                고객 관리 시스템
-                            </Typography>
-                            <Join stateRefresh={this.stateRefresh}/>
-                            <LoginForm stateRefresh={this.stateRefresh}/>
-                            </Toolbar>
-                        </AppBar>
-                        
+                                <div>
+                                    <AppBar position="static">
+                                        <Toolbar>
+                                            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                                                <MenuIcon />
+                                            </IconButton>
+                                            <Typography variant="h6" className={classes.title}>
+                                                고객 관리 시스템
+                                            </Typography>
+                                            <Join stateRefresh={this.stateRefresh}/>
+                                            <LoginForm stateRefresh={this.stateRefresh}/>
+                                        </Toolbar>
+                                    </AppBar>
+                                    <div className={classes.centerContent}>
+                                        회원가입~~<br></br>
+                                        로그인~~<br></br>
+                                        멋쟁이~~~<br></br>
+                                    </div>
+                                </div>
                         )
                         : (  //아니면
                             <div>

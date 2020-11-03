@@ -113,9 +113,6 @@ app.post('/api/login', async (req,res)=>{
                 dbSalt = rows[0].saltValue;
                 dbPassword = rows[0].userPassword;
                 hashPassword = crypto.createHash("sha512").update(inputPassword + dbSalt).digest("hex");
-                console.log(`디비 패스워드 : ${dbPassword}`);
-                console.log(`디비 소트 : ${dbSalt}`);
-                console.log(`해쉬 패스워드 : ${hashPassword}`);
             }
         });
     connection.query(sqlUserIdCheck, [inputId],
