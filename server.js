@@ -59,7 +59,6 @@ const { request } = require('https');
 const upload = multer({dest : './upload'});
 
 app.get('/api', (req,res) => {
-    console.log('요청옴');
     if(req.session.email){
         res.json({ loginCode : true });
         console.log(" loginCode : true");

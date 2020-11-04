@@ -9,6 +9,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import { session } from 'passport';
+
 
 
 class Logout extends React.Component{
@@ -67,22 +69,22 @@ class Logout extends React.Component{
             //         로그아웃
             // </Button>
               <div>
-              <Button  color="inherit" onClick={this.handleClickOpen}>로그아웃</Button>
-              <Dialog open={this.state.open} onClose={this.handleClose}>
-                  <DialogTitle onClose={this.handleClose}>
-                      알림
-                  </DialogTitle>
-                  <DialogContent>
-                      <Typography gutterBottom>
-                          로그아웃 하시겠 습니까?
-                      </Typography>
-                  </DialogContent>
-                  <DialogActions>
-                      <Button variant="contained" color="primary" onClick={this.handleLogout}>로그아웃</Button>
-                      <Button variant="outlined" color="primary" onClick={this.handleClose}>닫기</Button>
-                  </DialogActions>
-              </Dialog>
-          </div>
+                <Button  color="inherit" onClick={this.handleClickOpen}>로그아웃</Button>
+                <Dialog open={this.state.open} onClose={this.handleClose}>
+                    <DialogTitle onClose={this.handleClose}>
+                        알림
+                    </DialogTitle>
+                    <DialogContent>
+                        <Typography gutterBottom>
+                            로그아웃 하시겠습니까?
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" color="primary" onClick={this.handleLogout}>로그아웃</Button>
+                        <Button variant="outlined" color="primary" onClick={this.handleClose}>닫기</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
         )
     }
 }

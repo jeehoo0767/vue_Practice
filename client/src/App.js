@@ -40,6 +40,7 @@ const styles = theme => ({
         alignItems : 'center',
         fontSize : '50px',
         fontWeight : 'bold',
+        color : 'white',
         // backGround : ''
     },
     menu: {
@@ -257,9 +258,10 @@ class App extends React.Component{
                                         </Toolbar>
                                     </AppBar>
                                     <div className={classes.centerContent}>
-                                        회원가입~~<br></br>
+                                        {/* 회원가입~~<br></br>
                                         로그인~~<br></br>
-                                        멋쟁이~~~<br></br>
+                                        멋쟁이~~~<br></br> */}
+                                        <img src="6.jpg" alt="" className="bgImg"/>
                                     </div>
                                 </div>
                         )
