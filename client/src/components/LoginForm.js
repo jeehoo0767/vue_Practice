@@ -18,6 +18,8 @@ const styles = theme =>({
 class Join extends React.Component{
     constructor(props){
         super(props);
+        this.passwordInput = React.createRef();
+        this.textInput = React.createRef();
         this.state ={
             userId : "",
             userPassword:"",
@@ -54,9 +56,20 @@ class Join extends React.Component{
     
     handleFormSubmit = (e) =>{
         e.preventDefault();
-        if(this.state.userId=="" || this.state.userPassword==""){
-            alert("아이디를 입력 하세요.");
-            return false;
+        if(this.state.userId === '' && this.state.userPassword === ''){
+            alert("아이디는 필수 입력사항 입니다.");
+            console.log(this.textInput.current);
+            this.textInput.current.focus();
+            return;
+        }else if(this.state.userId === ''){
+            alert("아이디는 필수 입력사항 입니다.");
+            this.textInput.current.focus();
+            return;
+        }else if(this.state.userPassword === ''){
+            alert("비밀번호는 필수 입력사항 입니다.");
+            console.log(this.passwordInput.current);
+            this.passwordInput.current.focus();
+            return;
         }
         this.LoginForm()
             .then((response)=>{
@@ -108,8 +121,8 @@ class Join extends React.Component{
                         </Button>
                     </label>
                     <br/> */}
-                    <TextField label="아이디" type="text" name="userId" value={this.state.userId} onChange={this.handleValueChange}/><br></br>
-                    <TextField label="비밀번호" type="password" name="userPassword" vlaue={this.state.userPassword} onChange={this.handleValueChange}/><br></br>
+                    <TextField inputRef = {this.textInput}label="아이디" type="text" name="userId" value={this.state.userId} onChange={this.handleValueChange}/><br></br>
+                    <TextField inputRef={this.passwordInput} label="비밀번호" type="password" name="userPassword" vlaue={this.state.userPassword} onChange={this.handleValueChange}/><br></br>
                     {/* <TextField label="성별"type="text" name="gender" value={this.state.gender} onChange={this.handleValueChange}/><br></br>
                     <TextField label="직업"type="text" name="job" value={this.state.job} onChange={this.handleValueChange}/><br></br> */}
                     </DialogContent>

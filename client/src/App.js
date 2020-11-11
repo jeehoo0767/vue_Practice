@@ -44,7 +44,7 @@ const styles = theme => ({
     menu: {
         marginTop : 15,
         marginBottom : 15,
-        display:'flex',
+        display : 'flex',
         justifyContent : 'center'
     },
     paper :{
@@ -180,7 +180,6 @@ class App extends React.Component{
                     this.setState({loginCode : true});
                 }
             });
-            console.log(`로그인 코드 : ${this.state.loginCode}`);
     }
 
     componentDidMount() {
